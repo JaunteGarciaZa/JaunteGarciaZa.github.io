@@ -1,0 +1,45 @@
+{
+  "syncedAt": "2026-10-16T21:21:21.975Z",
+  "profile": {
+    "login": "JaunteGarciaZa",
+    "name": "Jaunte Kelvin Garcia",
+    "bio": "Java Developer in training @ VZAP | Building toward a full-stack developer | Johannesburg 🇿🇦",
+    "location": "Johannesburg, South Africa",
+    "url": "https://github.com/JaunteGarciaZa",
+    "avatar": "https://avatars.githubusercontent.com/u/208694036?v=4",
+    "joined": "2025-04-22T17:31:07Z",
+    "publicRepos": 3
+  },
+  "repos": [
+    {
+      "name": "JAVA-Pomodoro-timer",
+      "description": "a Java pomodoro timer using JavaFX",
+      "language": "Java",
+      "url": "https://github.com/JaunteGarciaZa/JAVA-Pomodoro-timer",
+      "homepage": null,
+      "stars": 0,
+      "pushedAt": "2026-05-26T08:15:54Z",
+      "topics": []
+    },
+    {
+      "name": "MyFirstWebsite",
+      "description": "My first HTML website",
+      "language": "HTML",
+      "url": "https://github.com/JaunteGarciaZa/MyFirstWebsite",
+      "homepage": null,
+      "stars": 0,
+      "pushedAt": "2026-04-30T09:59:59Z",
+      "topics": []
+    },
+    {
+      "name": "JavaStudentGradeCalculator",
+      "description": "a Java program that calculates and displays the grades of students based on their test scores.",
+      "language": "Java",
+      "url": "https://github.com/JaunteGarciaZa/JavaStudentGradeCalculator",
+      "homepage": null,
+      "stars": 0,
+      "pushedAt": "2026-04-16T16:37:38Z",
+      "topics": []
+    }
+  ]
+}
