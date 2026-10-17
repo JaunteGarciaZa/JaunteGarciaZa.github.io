@@ -11,6 +11,9 @@
     "sync:github": "node scripts/sync-github.mjs"
   },
   "dependencies": {
+    "@gsap/react": "2.1.2",
+    "gsap": "3.15.0",
+    "lenis": "1.3.27",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
