@@ -307,7 +307,7 @@ function Architecture() {
   );
 }
 
-// The inflated tube: a black outline, a flat blue body with flat shade and highlight bands, and film grain.
+// The inflated tube: a black outline, a flat blue body with flat shade and highlight bands, a travelling glint, and film grain.
 function Ribbon({ d, width, height = 600 }: { d: string; width: number; height?: number }) {
   const id = useId().replace(/:/g, '');
   const tube = { d, pathLength: 1, fill: 'none', strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
@@ -327,6 +327,14 @@ function Ribbon({ d, width, height = 600 }: { d: string; width: number; height?:
         <path {...tube} stroke="#4da2ff" strokeWidth={width} />
         <path {...tube} stroke="#2f86e6" strokeWidth={width} transform={`translate(0 ${width * 0.34})`} />
         <path {...tube} stroke="#a9d3ff" strokeWidth={width * 0.2} transform={`translate(0 ${-width * 0.22})`} />
+        <path
+          {...tube}
+          className="glint"
+          stroke="#fff"
+          strokeWidth={width * 0.1}
+          strokeDasharray="0.06 0.94"
+          transform={`translate(0 ${-width * 0.22})`}
+        />
         <rect width="1200" height={height} filter={`url(#grain-${id})`} opacity="0.3" style={{ mixBlendMode: 'multiply' }} />
       </g>
     </svg>
@@ -338,7 +346,7 @@ type StickerKind = 'rocket' | 'coin' | 'check' | 'wallet' | 'code' | 'sparkle' |
 const STICKERS: Record<StickerKind, JSX.Element> = {
   rocket: (
     <>
-      <path d="M40 72 Q50 99 60 72 Z" fill="#ffd731" />
+      <path className="flame" d="M40 72 Q50 99 60 72 Z" fill="#ffd731" />
       <path d="M34 50 L18 76 L36 70 Z M66 50 L82 76 L64 70 Z" fill="#5c4ade" />
       <path d="M50 6 C67 21 71 44 66 72 L34 72 C29 44 33 21 50 6 Z" fill="#fb4903" />
       <circle cx="50" cy="38" r="9" fill="#dceeff" />
@@ -354,12 +362,12 @@ const STICKERS: Record<StickerKind, JSX.Element> = {
   check: (
     <>
       <rect x="7" y="7" width="86" height="86" rx="22" fill="#55db9c" />
-      <path d="M28 52 L44 67 L73 35" fill="none" strokeWidth="8" />
+      <path className="tick" d="M28 52 L44 67 L73 35" pathLength={1} fill="none" strokeWidth="8" />
     </>
   ),
   wallet: (
     <>
-      <rect x="22" y="12" width="48" height="24" rx="6" fill="#ffd731" />
+      <rect className="peek" x="22" y="12" width="48" height="24" rx="6" fill="#ffd731" />
       <rect x="9" y="24" width="82" height="60" rx="14" fill="#5c4ade" />
       <rect x="58" y="43" width="33" height="22" rx="9" fill="#e9ccff" />
       <circle cx="70" cy="54" r="3.5" fill="#000" />
@@ -377,7 +385,7 @@ const STICKERS: Record<StickerKind, JSX.Element> = {
 
 function Sticker({ kind, style }: { kind: StickerKind; style?: CSSProperties & { '--s'?: string } }) {
   return (
-    <svg className="sticker" viewBox="0 0 100 100" style={style} aria-hidden="true">
+    <svg className="sticker" data-kind={kind} viewBox="0 0 100 100" style={style} aria-hidden="true">
       <g stroke="#000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
         {STICKERS[kind]}
       </g>

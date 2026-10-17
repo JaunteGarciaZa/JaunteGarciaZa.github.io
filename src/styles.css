@@ -678,6 +678,9 @@ p {
   .marquee-track {
     animation: none;
   }
+  .glint {
+    display: none;
+  }
   .repo,
   .gh-card,
   .btn,

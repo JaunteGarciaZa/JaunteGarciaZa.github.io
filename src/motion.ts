@@ -24,14 +24,15 @@ function dropChars(el: Element, aria: 'auto' | 'none') {
   });
 }
 
-// Ribbon paths carry pathLength=1, so a dash of 1 is the whole tube.
+// Ribbon paths carry pathLength=1, so a dash of 1 is the whole tube. Dash tweens need autoRound off,
+// or GSAP snaps these fractions of a pixel to 0 or 1.
 function drawRibbon(poster: Element) {
-  const paths = poster.querySelectorAll('.ribbon path');
+  const paths = poster.querySelectorAll('.ribbon path:not(.glint)');
   if (!paths.length) return null;
   return gsap.fromTo(
     paths,
     { strokeDasharray: 1, strokeDashoffset: 1 },
-    { strokeDashoffset: 0, duration: 1.6, ease: 'power2.inOut' },
+    { strokeDashoffset: 0, duration: 1.6, ease: 'power2.inOut', autoRound: false },
   );
 }
 
@@ -44,6 +45,107 @@ function popStickers(poster: Element) {
     duration: 0.7,
     ease: 'back.out(2.4)',
     stagger: 0.12,
+  });
+}
+
+// Idle loops: every sticker bobs, then does its own thing. Tweens target the inner artwork
+// so they never fight the pop-in and parallax tweens on the outer <svg>.
+function idleSticker(sticker: SVGSVGElement): gsap.core.Animation[] {
+  const art = sticker.querySelector('g');
+  if (!art) return [];
+  const loop = { repeat: -1, yoyo: true, ease: 'sine.inOut' } as const;
+  const tweens: gsap.core.Animation[] = [
+    gsap.to(art, { y: random(-7, -4), duration: random(1.6, 2.4), delay: random(0, 1), ...loop }),
+  ];
+
+  switch (sticker.dataset.kind) {
+    case 'rocket':
+      tweens.push(
+        gsap.to(art, { rotation: 5, duration: 1.3, transformOrigin: '50% 60%', ...loop }),
+        gsap.to(art.querySelector('.flame'), {
+          scaleY: () => random(0.55, 1.25),
+          transformOrigin: '50% 0%',
+          duration: 0.09,
+          repeat: -1,
+          repeatRefresh: true,
+          ease: 'none',
+        }),
+      );
+      break;
+    case 'coin':
+      // A full spin every few seconds: flip to the back, then on round to the front.
+      tweens.push(
+        gsap
+          .timeline({ repeat: -1, repeatDelay: random(2, 3.5) })
+          .to(art, { scaleX: -1, duration: 0.45, ease: 'power2.in', transformOrigin: '50% 50%' })
+          .to(art, { scaleX: 1, duration: 0.45, ease: 'power2.out' }),
+      );
+      break;
+    case 'check': {
+      const tick = art.querySelector('.tick');
+      tweens.push(gsap.to(art, { rotation: 6, duration: 1.8, transformOrigin: '50% 50%', ...loop }));
+      if (tick) {
+        gsap.set(tick, { strokeDasharray: 1 });
+        tweens.push(
+          gsap
+            .timeline({ repeat: -1, repeatDelay: 3 })
+            .fromTo(tick, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.5, ease: 'power2.out', autoRound: false }),
+        );
+      }
+      break;
+    }
+    case 'wallet':
+      tweens.push(
+        gsap
+          .timeline({ repeat: -1, repeatDelay: 1.8 })
+          .to(art.querySelector('.peek'), { y: -10, duration: 0.35, ease: 'back.out(3)' })
+          .to(art.querySelector('.peek'), { y: 0, duration: 0.4, ease: 'power2.in' }, '+=0.6'),
+      );
+      break;
+    case 'code':
+      tweens.push(gsap.to(art, { rotation: -8, duration: 1.4, transformOrigin: '50% 50%', ...loop }));
+      break;
+    case 'sparkle':
+      tweens.push(
+        gsap
+          .timeline({ repeat: -1, repeatDelay: 0.8 })
+          .to(art, { scale: 1.25, rotation: '+=45', duration: 0.4, ease: 'power2.out', transformOrigin: '50% 50%' })
+          .to(art, { scale: 1, rotation: '+=45', duration: 0.5, ease: 'power2.in' }),
+      );
+      break;
+    case 'bolt':
+      // A quick zap: a few sharp jolts, then rest.
+      tweens.push(
+        gsap
+          .timeline({ repeat: -1, repeatDelay: 2.2 })
+          .to(art, { x: () => random(-5, 5), rotation: () => random(-10, 10), duration: 0.05, repeat: 7, yoyo: true, transformOrigin: '50% 50%' })
+          .to(art, { x: 0, rotation: 0, duration: 0.1 }),
+      );
+      break;
+  }
+  return tweens;
+}
+
+// Ribbons float gently and a glint of light travels along the tube.
+function idleRibbon(ribbon: SVGSVGElement): gsap.core.Animation[] {
+  const tweens: gsap.core.Animation[] = [
+    gsap.to(ribbon, { y: -8, duration: 3.2, repeat: -1, yoyo: true, ease: 'sine.inOut' }),
+  ];
+  const glint = ribbon.querySelector('.glint');
+  if (glint) {
+    tweens.push(gsap.fromTo(glint, { strokeDashoffset: 0.1 }, { strokeDashoffset: -0.95, duration: 3.5, repeat: -1, repeatDelay: 1.5, ease: 'power1.inOut', autoRound: false }));
+  }
+  return tweens;
+}
+
+// Loops only run while their section is on screen.
+function whileVisible(el: Element, tweens: gsap.core.Animation[]) {
+  tweens.forEach((t) => t.pause());
+  ScrollTrigger.create({
+    trigger: el.closest('.band') ?? el,
+    start: 'top bottom',
+    end: 'bottom top',
+    onToggle: ({ isActive }) => tweens.forEach((t) => (isActive ? t.resume() : t.pause())),
   });
 }
 
@@ -136,6 +238,10 @@ export function useMotion() {
           scrollTrigger: { trigger: sticker.closest('.band'), start: 'top bottom', end: 'bottom top', scrub: true },
         });
       });
+
+      // Idle loops for the graphics.
+      gsap.utils.toArray<SVGSVGElement>('.sticker').forEach((sticker) => whileVisible(sticker, idleSticker(sticker)));
+      gsap.utils.toArray<SVGSVGElement>('.ribbon').forEach((ribbon) => whileVisible(ribbon, idleRibbon(ribbon)));
 
       // Supporting copy rises in.
       gsap.utils.toArray<Element>('.band:not(.hero) :is(.tagline, .cta, .note, .arch figcaption)').forEach((el) => {
