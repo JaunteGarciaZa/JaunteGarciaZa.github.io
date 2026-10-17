@@ -50,8 +50,8 @@ function popStickers(poster: Element) {
 
 // Idle loops: every sticker bobs, then does its own thing. Tweens target the inner artwork
 // so they never fight the pop-in and parallax tweens on the outer <svg>.
-function idleSticker(sticker: SVGSVGElement): gsap.core.Animation[] {
-  const art = sticker.querySelector('g');
+function idleSticker(sticker: HTMLElement | SVGSVGElement): gsap.core.Animation[] {
+  const art = sticker.querySelector('g, .bubble-text');
   if (!art) return [];
   const loop = { repeat: -1, yoyo: true, ease: 'sine.inOut' } as const;
   const tweens: gsap.core.Animation[] = [
@@ -122,8 +122,101 @@ function idleSticker(sticker: SVGSVGElement): gsap.core.Animation[] {
           .to(art, { x: 0, rotation: 0, duration: 0.1 }),
       );
       break;
+    case 'taxi':
+      // Engine idling: the body shudders on its wheels.
+      tweens.push(gsap.to(art.querySelector('.taxi-body'), { y: -1.5, duration: 0.14, repeat: -1, yoyo: true, ease: 'sine.inOut' }));
+      break;
+    case 'ponte':
+      tweens.push(blink(art.querySelector('.sign'), 1.4));
+      break;
+    case 'braai':
+      tweens.push(
+        gsap.to(art.querySelector('.fire'), {
+          scaleY: () => random(0.7, 1.2),
+          scaleX: () => random(0.9, 1.08),
+          transformOrigin: '50% 100%',
+          duration: 0.12,
+          repeat: -1,
+          repeatRefresh: true,
+          ease: 'none',
+        }),
+      );
+      break;
+    case 'jacaranda':
+      tweens.push(gsap.to(art.querySelector('.canopy'), { rotation: 3, duration: 2, transformOrigin: '50% 100%', ...loop }));
+      art.querySelectorAll('.petal').forEach((petal, i) => {
+        tweens.push(
+          gsap.fromTo(
+            petal,
+            { y: -14, x: 0, opacity: 1 },
+            { y: 22, x: random(-8, 8), opacity: 0, duration: random(2.2, 3), delay: i * 0.9, repeat: -1, ease: 'sine.in' },
+          ),
+        );
+      });
+      break;
+    case 'bubble':
+      tweens.push(
+        gsap.to(art, { rotation: -5, duration: 1.6, transformOrigin: '50% 50%', ...loop }),
+        gsap
+          .timeline({ repeat: -1, repeatDelay: random(2, 3.5) })
+          .to(art, { scale: 1.15, duration: 0.15, ease: 'power2.out' })
+          .to(art, { scale: 1, duration: 0.5, ease: 'elastic.out(1.2, 0.4)' }),
+      );
+      break;
   }
   return tweens;
+}
+
+// An on/off light, like a sign or an aircraft beacon.
+function blink(el: Element | null, every: number) {
+  return gsap.to(el, { opacity: 0.25, duration: 0.18, repeat: -1, yoyo: true, repeatDelay: every, ease: 'steps(1)' });
+}
+
+// The skyline lives a little: the taxi drives through, signs and the tower beacon blink, windows flicker, trees sway.
+function idleSkyline(skyline: SVGSVGElement): gsap.core.Animation[] {
+  const taxi = skyline.querySelector('.skyline-taxi');
+  const tweens: gsap.core.Animation[] = [
+    gsap.fromTo(taxi, { x: -120 }, { x: 1560, duration: 11, repeat: -1, repeatDelay: 1.5, ease: 'none' }),
+    gsap.to(skyline.querySelector('.skyline-taxi .taxi-body'), { y: -2, duration: 0.14, repeat: -1, yoyo: true }),
+    blink(skyline.querySelector('.sign'), 1.6),
+    blink(skyline.querySelector('.beacon'), 0.9),
+  ];
+  // A few windows switch on and off at random.
+  const wins = gsap.utils.toArray<Element>('.win', skyline);
+  tweens.push(
+    gsap.timeline({ repeat: -1, repeatRefresh: true }).call(() => {
+      const w = wins[Math.floor(random(0, wins.length))];
+      if (w) w.setAttribute('fill', w.getAttribute('fill') === '#ffd731' ? '#dceeff' : '#ffd731');
+    }, [], 0.35),
+  );
+  skyline.querySelectorAll('.tree').forEach((tree, i) => {
+    tweens.push(
+      gsap.to(tree, { rotation: i % 2 ? 2 : -2, duration: random(1.8, 2.6), transformOrigin: '50% 100%', repeat: -1, yoyo: true, ease: 'sine.inOut' }),
+    );
+  });
+  return tweens;
+}
+
+// The hero bubble flips through greetings in each language.
+function cycleGreeting(el: HTMLElement): gsap.core.Animation[] {
+  const words = (el.dataset.greet ?? '').split('|').filter(Boolean);
+  if (words.length < 2) return [];
+  let i = 0;
+  return [
+    gsap
+      .timeline({ repeat: -1, repeatDelay: 1.8, delay: 2.4 })
+      .to(el, {
+        yPercent: -110,
+        opacity: 0,
+        duration: 0.22,
+        ease: 'power2.in',
+        onComplete: () => {
+          i = (i + 1) % words.length;
+          el.textContent = words[i] ?? '';
+        },
+      })
+      .fromTo(el, { yPercent: 110, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.4, ease: 'back.out(2.2)' }),
+  ];
 }
 
 // Ribbons float gently and a glint of light travels along the tube.
@@ -192,7 +285,7 @@ export function useMotion() {
         if (stickers) intro.add(stickers, 0.8);
       }
       intro.from(
-        '.hero .label, .hero .tagline, .hero .cta',
+        '.hero .greet, .hero .label, .hero .tagline, .hero .cta',
         { y: 30, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1 },
         0.7,
       );
@@ -240,7 +333,10 @@ export function useMotion() {
       });
 
       // Idle loops for the graphics.
-      gsap.utils.toArray<SVGSVGElement>('.sticker').forEach((sticker) => whileVisible(sticker, idleSticker(sticker)));
+      gsap.utils.toArray<HTMLElement | SVGSVGElement>('.sticker').forEach((sticker) => whileVisible(sticker, idleSticker(sticker)));
+      gsap.utils.toArray<SVGSVGElement>('.skyline').forEach((skyline) => whileVisible(skyline, idleSkyline(skyline)));
+      const greeting = document.querySelector<HTMLElement>('[data-greet]');
+      if (greeting) whileVisible(greeting, cycleGreeting(greeting));
       gsap.utils.toArray<SVGSVGElement>('.ribbon').forEach((ribbon) => whileVisible(ribbon, idleRibbon(ribbon)));
 
       // Supporting copy rises in.
@@ -276,6 +372,7 @@ export function useMotion() {
         stats.forEach((dt) => {
           if (dt.dataset.value) dt.textContent = dt.dataset.value;
         });
+        if (greeting) greeting.textContent = greeting.dataset.greet?.split('|')[0] ?? '';
       };
     });
   });
