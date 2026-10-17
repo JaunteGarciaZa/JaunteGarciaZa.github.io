@@ -1,6 +1,25 @@
-# Portfolio
+# Jaunte Kelvin Garcia · Portfolio
 
-Personal site for Jaunte Kelvin Garcia: the WIOS platform (Learn, Analytics, Console and its AI dev crew), capabilities, public GitHub projects and a timeline.
+**Live: [jauntegarciaza.github.io](https://jauntegarciaza.github.io/)**
+
+My personal site, made in Johannesburg. It covers WIOS (the learning platform I'm building: Learn, Analytics, and a Console with an AI dev crew), my toolkit, my public projects and how I got here.
+
+## What's interesting about it
+
+- **A sticker-book design system built from scratch.** Every sticker, ribbon and the Joburg skyline (Hillbrow Tower, Ponte City, jacarandas and a minibus taxi) is hand-built SVG. There are no image files or icon packs.
+- **Motion throughout.** GSAP ScrollTrigger and SplitText drive the letter drops, ribbon draw-ins, sticker pops and card reveals, on top of Lenis smooth scrolling. Every sticker has its own idle loop, and loops pause when they're off screen.
+- **Respects reduced motion.** Visitors with reduced motion turned on get a plain static page and native scrolling.
+- **Local flavour.** Greetings in isiZulu, South African English and Afrikaans, and slang stickers (Lekker!, Eish!, Sharp sharp!).
+- **Data synced at build time, deployed by CI.** Public repo data comes from the GitHub API through `pnpm sync:github`, and GitHub Actions builds and publishes to Pages on every push.
+
+**Stack:** React 18 · TypeScript · Vite · GSAP · Lenis · SVG · GitHub Actions
+
+## Code map
+
+- `src/App.tsx`: page structure and sections
+- `src/art.tsx`: sticker artwork, speech bubbles and the skyline
+- `src/motion.ts`: smooth scrolling, entrance animations and idle loops
+- `src/styles.css`: design tokens and styles
 
 ## Run
 
