@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-10-17T11:17:26.349Z",
+  "syncedAt": "2026-10-17T11:39:23.785Z",
   "profile": {
     "login": "JaunteGarciaZa",
     "name": "Jaunte Kelvin Garcia",
@@ -12,44 +12,72 @@
   },
   "repos": [
     {
+      "name": "JavaStudentGradeCalculator",
+      "description": "Academic Management CLI in Java 25: registers students, validates marks, averages with streams and prints class reports. CI-tested.",
+      "language": "Java",
+      "url": "https://github.com/JaunteGarciaZa/JavaStudentGradeCalculator",
+      "homepage": null,
+      "stars": 0,
+      "pushedAt": "2026-10-17T11:38:45Z",
+      "topics": [
+        "cli",
+        "java",
+        "java-streams",
+        "oop",
+        "student-management"
+      ]
+    },
+    {
+      "name": "JAVA-Pomodoro-timer",
+      "description": "Lo-fi Pomodoro clock in JavaFX: a hand-drawn coffee mug fills as you focus and drains on breaks, with synthesised chimes. Download the JAR from Releases.",
+      "language": "Java",
+      "url": "https://github.com/JaunteGarciaZa/JAVA-Pomodoro-timer",
+      "homepage": "https://github.com/JaunteGarciaZa/JAVA-Pomodoro-timer/releases/latest",
+      "stars": 0,
+      "pushedAt": "2026-10-17T11:37:44Z",
+      "topics": [
+        "canvas-animation",
+        "desktop-app",
+        "java",
+        "javafx",
+        "maven",
+        "pomodoro-timer"
+      ]
+    },
+    {
+      "name": "MyFirstWebsite",
+      "description": "My first website: a landing page in HTML5, Tailwind CSS and JavaScript, with cards rendered from data. Live on GitHub Pages.",
+      "language": "HTML",
+      "url": "https://github.com/JaunteGarciaZa/MyFirstWebsite",
+      "homepage": "https://jauntegarciaza.github.io/MyFirstWebsite/",
+      "stars": 0,
+      "pushedAt": "2026-10-17T11:34:06Z",
+      "topics": [
+        "github-pages",
+        "html5",
+        "javascript",
+        "landing-page",
+        "tailwindcss"
+      ]
+    },
+    {
       "name": "JaunteGarciaZa.github.io",
       "description": "Portfolio: Jaunte Kelvin Garcia, full-stack developer building WIOS",
       "language": "TypeScript",
       "url": "https://github.com/JaunteGarciaZa/JaunteGarciaZa.github.io",
       "homepage": "https://jauntegarciaza.github.io/",
       "stars": 0,
-      "pushedAt": "2026-10-17T11:12:00Z",
-      "topics": []
-    },
-    {
-      "name": "JAVA-Pomodoro-timer",
-      "description": "a Java pomodoro timer using JavaFX",
-      "language": "Java",
-      "url": "https://github.com/JaunteGarciaZa/JAVA-Pomodoro-timer",
-      "homepage": null,
-      "stars": 0,
-      "pushedAt": "2026-05-26T08:15:54Z",
-      "topics": []
-    },
-    {
-      "name": "MyFirstWebsite",
-      "description": "My first HTML website",
-      "language": "HTML",
-      "url": "https://github.com/JaunteGarciaZa/MyFirstWebsite",
-      "homepage": null,
-      "stars": 0,
-      "pushedAt": "2026-04-30T09:59:59Z",
-      "topics": []
-    },
-    {
-      "name": "JavaStudentGradeCalculator",
-      "description": "a Java program that calculates and displays the grades of students based on their test scores.",
-      "language": "Java",
-      "url": "https://github.com/JaunteGarciaZa/JavaStudentGradeCalculator",
-      "homepage": null,
-      "stars": 0,
-      "pushedAt": "2026-04-16T16:37:38Z",
-      "topics": []
+      "pushedAt": "2026-10-17T11:23:24Z",
+      "topics": [
+        "github-pages",
+        "gsap",
+        "lenis",
+        "portfolio",
+        "react",
+        "svg",
+        "typescript",
+        "vite"
+      ]
     }
   ]
 }

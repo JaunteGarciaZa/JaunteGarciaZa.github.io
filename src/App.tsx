@@ -25,6 +25,7 @@ const STICKER_FILLS = ['blue', 'mint', 'lavender', 'sunburst', 'ember', 'violet'
 const monthYear = (iso: string) => new Date(iso).toLocaleDateString('en-ZA', { month: 'short', year: 'numeric' });
 
 type Repo = (typeof github.repos)[number];
+const isRelease = (url: string) => url.includes('/releases');
 // Written-up repos in their chosen order, then anything new from GitHub.
 const rank = (name: string) => (projectOrder.includes(name) ? projectOrder.indexOf(name) : projectOrder.length);
 const projects = [...github.repos].sort((a, b) => rank(a.name) - rank(b.name));
@@ -348,8 +349,8 @@ function ProjectCard({ repo }: { repo: Repo }) {
           <span className="chip fill-mint">You’re looking at it</span>
         ) : (
           repo.homepage && (
-            <a className="btn" href={repo.homepage} target="_blank" rel="noreferrer" aria-label={`${title}: live site`}>
-              Live ↗
+            <a className="btn" href={repo.homepage} target="_blank" rel="noreferrer" aria-label={`${title}: ${isRelease(repo.homepage) ? 'download' : 'live site'}`}>
+              {isRelease(repo.homepage) ? 'Download ↗' : 'Live ↗'}
             </a>
           )
         )}
