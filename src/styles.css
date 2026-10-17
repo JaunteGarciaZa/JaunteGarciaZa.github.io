@@ -221,7 +221,7 @@ p {
 .pill:focus-visible,
 .logo:focus-visible,
 .plus:focus-visible,
-.repo:focus-visible,
+.project a:focus-visible,
 .gh-card:focus-visible {
   outline: 3px solid var(--color-voltage-violet);
   outline-offset: 3px;
@@ -547,50 +547,90 @@ p {
   margin-bottom: 16px;
 }
 
-/* Repos */
-.repos {
+/* Projects */
+.projects {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-top: 40px;
+  gap: 56px 12px;
+  margin-top: 72px;
 }
-.repo {
+.project {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  text-decoration: none;
+  gap: 20px;
+  padding: 28px 24px 24px;
+  border-radius: var(--radius-body);
   /* translate/rotate, not transform: GSAP owns transform for the scroll-in animation. */
-  transition: translate 0.2s, rotate 0.2s, background-color 0.2s;
+  transition: translate 0.2s, rotate 0.2s;
 }
-.repo:hover {
+.project:hover {
   translate: 0 -4px;
-  rotate: -1deg;
-  background: var(--color-sunburst);
+  rotate: -0.6deg;
 }
-.repo-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.arrow {
+.project.featured {
+  grid-column: 1 / -1;
   display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border: var(--line);
-  border-radius: var(--radius-pill);
-  font-weight: 700;
+  grid-template-columns: 1fr 1.1fr;
+  grid-template-areas: 'main detail' 'links detail';
+  gap: 24px 48px;
+  padding: 40px;
+  background: var(--color-lavender);
 }
-.repo h3 {
-  margin-top: 16px;
-  font: 700 24px/1.15 var(--font-ui);
-  text-transform: capitalize;
+.project.featured:hover {
+  rotate: -0.3deg;
 }
-.repo p {
-  font-size: 15px;
+.project-main {
+  grid-area: main;
+  padding-right: 72px;
+}
+.project.featured .project-main {
+  padding-right: 0;
+}
+.project-main .chip {
+  margin-bottom: 16px;
+}
+.project h3 {
+  font: 700 clamp(24px, 2.4vw, 30px) / 1.1 var(--font-ui);
+}
+.project.featured h3 {
+  font: 400 clamp(40px, 6vw, 80px) / 0.85 var(--font-display);
+  text-transform: uppercase;
+}
+.project-tagline {
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.project.featured .project-tagline {
+  font-size: clamp(17px, 1.6vw, 20px);
+  margin-top: 20px;
+}
+.project-detail {
+  grid-area: detail;
   flex: 1;
 }
+.project .highlights {
+  margin-top: 0;
+}
+.project.featured .highlights {
+  border-top: none;
+  padding-top: 0;
+  font-size: 15px;
+}
+.project-links {
+  grid-area: links;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+}
+.project.featured .project-links {
+  align-self: end;
+}
 .repo-meta {
+  margin-left: auto;
   font: 700 12px var(--font-ui);
   letter-spacing: 0.032em;
   text-transform: uppercase;
@@ -691,9 +731,13 @@ p {
 
 @media (max-width: 960px) {
   .products,
-  .repos,
+  .projects,
   .caps {
     grid-template-columns: 1fr;
+  }
+  .project.featured {
+    display: flex;
+    padding: 32px 24px 24px;
   }
   .stats {
     grid-template-columns: repeat(2, 1fr);
@@ -748,7 +792,7 @@ p {
   .glint {
     display: none;
   }
-  .repo,
+  .project,
   .gh-card,
   .btn,
   .pill {

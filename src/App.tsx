@@ -1,7 +1,17 @@
 import { useId, useState } from 'react';
 import { Bubble, Skyline, Sticker } from './art';
 import github from './data/github.json';
-import { capabilities, journey, person, products, stats, type Product } from './data/profile';
+import {
+  capabilities,
+  journey,
+  person,
+  products,
+  projectNotes,
+  projectOrder,
+  stats,
+  type Product,
+  type ProjectNote,
+} from './data/profile';
 import { useMotion } from './motion';
 
 // Languages take a sticker colour rather than GitHub's own palette.
@@ -13,6 +23,11 @@ const LANG_COLOR: Record<string, string> = {
 };
 const STICKER_FILLS = ['blue', 'mint', 'lavender', 'sunburst', 'ember', 'violet'] as const;
 const monthYear = (iso: string) => new Date(iso).toLocaleDateString('en-ZA', { month: 'short', year: 'numeric' });
+
+type Repo = (typeof github.repos)[number];
+// Written-up repos in their chosen order, then anything new from GitHub.
+const rank = (name: string) => (projectOrder.includes(name) ? projectOrder.indexOf(name) : projectOrder.length);
+const projects = [...github.repos].sort((a, b) => rank(a.name) - rank(b.name));
 
 const NAV = [
   { href: '#wios', label: 'WIOS' },
@@ -190,24 +205,10 @@ export default function App() {
               <Sticker kind="code" style={{ top: '4%', left: 'min(46vw, 620px)', rotate: '-14deg' }} />
               <Sticker kind="jacaranda" style={{ bottom: '0', left: 'min(66vw, 940px)', rotate: '6deg', '--s': 'clamp(72px, 12vw, 170px)' }} />
             </div>
-            <p className="tagline">Public work from the Java track, pulled from GitHub.</p>
-            <div className="repos">
-              {github.repos.map((r) => (
-                <a key={r.name} className="card repo" href={r.url} target="_blank" rel="noreferrer">
-                  <span className="repo-top">
-                    {r.language && (
-                      <span className="chip" style={{ background: LANG_COLOR[r.language] ?? 'var(--color-soft-mist)' }}>
-                        {r.language}
-                      </span>
-                    )}
-                    <span className="arrow" aria-hidden="true">
-                      ↗
-                    </span>
-                  </span>
-                  <h3>{r.name.replace(/[-_]/g, ' ')}</h3>
-                  <p>{r.description ?? 'No description yet.'}</p>
-                  <span className="repo-meta">Updated {monthYear(r.pushedAt)}</span>
-                </a>
+            <p className="tagline">Everything public on my GitHub, from my first landing page to the site you’re on.</p>
+            <div className="projects">
+              {projects.map((r) => (
+                <ProjectCard key={r.name} repo={r} />
               ))}
             </div>
           </div>
@@ -310,6 +311,66 @@ function ProductCard({ p }: { p: Product }) {
       </ul>
     </article>
   );
+}
+
+function ProjectCard({ repo }: { repo: Repo }) {
+  const note: ProjectNote | undefined = projectNotes[repo.name];
+  const title = note?.title ?? repo.name.replace(/[-_]/g, ' ');
+  return (
+    <article className={note?.featured ? 'card project featured' : 'card project'}>
+      <ProjectArt art={note?.art} />
+      <div className="project-main">
+        <span className="chip" style={{ background: (repo.language && LANG_COLOR[repo.language]) || 'var(--color-soft-mist)' }}>
+          {note?.kind ?? repo.language ?? 'Repository'}
+        </span>
+        <h3>{title}</h3>
+        <p className="project-tagline">{note?.tagline ?? repo.description ?? 'No description yet.'}</p>
+      </div>
+      {note && (
+        <div className="project-detail">
+          <ul className="highlights">
+            {note.highlights.map((h) => (
+              <li key={h}>{h}</li>
+            ))}
+          </ul>
+          <ul className="tags">
+            {note.stack.map((t) => (
+              <li key={t}>{t}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <div className="project-links">
+        <a className="btn filled" href={repo.url} target="_blank" rel="noreferrer" aria-label={`${title}: code on GitHub`}>
+          Code ↗
+        </a>
+        {note?.featured ? (
+          <span className="chip fill-mint">You’re looking at it</span>
+        ) : (
+          repo.homepage && (
+            <a className="btn" href={repo.homepage} target="_blank" rel="noreferrer" aria-label={`${title}: live site`}>
+              Live ↗
+            </a>
+          )
+        )}
+        <span className="repo-meta">Updated {monthYear(repo.pushedAt)}</span>
+      </div>
+    </article>
+  );
+}
+
+function ProjectArt({ art }: { art?: ProjectNote['art'] }) {
+  if (!art) return null;
+  if (art === 'collage') {
+    return (
+      <>
+        <Sticker kind="code" style={{ top: '-34px', right: '120px', rotate: '-10deg', '--s': '76px' }} />
+        <Sticker kind="ponte" style={{ top: '-46px', right: '40px', rotate: '8deg', '--s': '88px' }} />
+        <Sticker kind="sparkle" style={{ top: '-22px', right: '8px', rotate: '12deg', '--s': '44px' }} />
+      </>
+    );
+  }
+  return <Sticker kind={art} style={{ top: '-34px', right: '20px', rotate: art === 'mug' ? '8deg' : '-8deg', '--s': '80px' }} />;
 }
 
 function Architecture() {

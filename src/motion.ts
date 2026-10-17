@@ -154,6 +154,31 @@ function idleSticker(sticker: HTMLElement | SVGSVGElement): gsap.core.Animation[
         );
       });
       break;
+    case 'mug':
+      art.querySelectorAll('.steam').forEach((steam) => {
+        tweens.push(
+          gsap.fromTo(steam, { y: 4, opacity: 0 }, { y: -6, opacity: 1, duration: 1.4, repeat: -1, yoyo: true, ease: 'sine.inOut' }),
+        );
+      });
+      break;
+    case 'terminal':
+      tweens.push(blink(art.querySelector('.cursor'), 0.45));
+      break;
+    case 'browser':
+      // The cards tilt one after another, like the hover cards on that first site.
+      tweens.push(
+        gsap
+          .timeline({ repeat: -1, repeatDelay: 1.2 })
+          .to(art.querySelectorAll('.tile'), {
+            rotation: 8,
+            transformOrigin: '50% 100%',
+            duration: 0.25,
+            ease: 'power2.out',
+            stagger: 0.15,
+          })
+          .to(art.querySelectorAll('.tile'), { rotation: 0, duration: 0.4, ease: 'back.out(3)', stagger: 0.15 }, '+=0.3'),
+      );
+      break;
     case 'bubble':
       tweens.push(
         gsap.to(art, { rotation: -5, duration: 1.6, transformOrigin: '50% 50%', ...loop }),
@@ -352,7 +377,7 @@ export function useMotion() {
 
       // Cards tumble into place in batches as they reach the viewport.
       const cards = gsap.utils.toArray<Element>(
-        '.stats .card, .node, .product, .caps .card, .repo, .timeline li, .gh-card',
+        '.stats .card, .node, .product, .caps .card, .project, .timeline li, .gh-card',
       );
       gsap.set(cards, { y: 80, opacity: 0, rotation: () => random(-6, 6) });
       ScrollTrigger.batch(cards, {

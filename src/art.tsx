@@ -12,7 +12,10 @@ export type StickerKind =
   | 'taxi'
   | 'ponte'
   | 'braai'
-  | 'jacaranda';
+  | 'jacaranda'
+  | 'mug'
+  | 'terminal'
+  | 'browser';
 
 type StickerStyle = CSSProperties & { '--s'?: string };
 
@@ -108,6 +111,42 @@ const STICKERS: Record<StickerKind, JSX.Element> = {
         <circle cx="67" cy="42" r="18" fill="#e9ccff" />
         <circle cx="49" cy="28" r="20" fill="#5c4ade" />
       </g>
+    </>
+  ),
+  // The Pomodoro clock's red mug, steaming.
+  mug: (
+    <>
+      <path className="steam" d="M36 24 C32 17 40 13 36 5 M50 22 C46 15 54 11 50 3 M64 24 C60 17 68 13 64 5" fill="none" strokeWidth="3" />
+      <path d="M70 42 H76 A14 14 0 0 1 76 70 H70 V63 H76 A7 7 0 0 0 76 49 H70 Z" fill="#fb4903" />
+      <path d="M22 32 H76 L71 87 Q70 94 63 94 H35 Q28 94 27 87 Z" fill="#fb4903" />
+      <ellipse cx="49" cy="32" rx="27" ry="6" fill="#000" />
+    </>
+  ),
+  // A console window with a blinking cursor.
+  terminal: (
+    <>
+      <rect x="6" y="14" width="88" height="74" rx="14" fill="#5c4ade" />
+      <circle cx="18" cy="23" r="3" fill="#fff" />
+      <circle cx="27" cy="23" r="3" fill="#fff" />
+      <circle cx="36" cy="23" r="3" fill="#fff" />
+      <rect x="12" y="31" width="76" height="51" rx="7" fill="#000" />
+      <path d="M21 46 L29 52 L21 58" fill="none" stroke="#55db9c" strokeWidth="4" />
+      <rect className="cursor" x="34" y="54" width="14" height="5" fill="#55db9c" stroke="none" />
+      <path d="M21 70 H62" fill="none" stroke="#e9ccff" strokeWidth="3" />
+    </>
+  ),
+  // A browser window whose cards tilt, like the hover cards on the first site.
+  browser: (
+    <>
+      <rect x="6" y="12" width="88" height="76" rx="14" fill="#fff" />
+      <path d="M6 30 H94" fill="none" />
+      <circle cx="17" cy="21" r="3" fill="#fb4903" />
+      <circle cx="26" cy="21" r="3" fill="#ffd731" />
+      <circle cx="35" cy="21" r="3" fill="#55db9c" />
+      <rect x="14" y="37" width="46" height="9" rx="3" fill="#ffd731" />
+      <rect className="tile" x="14" y="53" width="20" height="27" rx="4" fill="#dceeff" />
+      <rect className="tile" x="40" y="53" width="20" height="27" rx="4" fill="#e9ccff" />
+      <rect className="tile" x="66" y="53" width="20" height="27" rx="4" fill="#55db9c" />
     </>
   ),
 };

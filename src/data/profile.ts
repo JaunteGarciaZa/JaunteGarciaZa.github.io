@@ -93,3 +93,74 @@ export const journey: { when: string; title: string; text: string }[] = [
   { when: 'Jul 2026', title: 'WIOS Analytics', text: 'Split learning analytics into its own xAPI service so any LMS can use it.' },
   { when: 'Oct 2026', title: 'WIOS Console and the dev crew', text: 'Built the operator console and an AI crew that turns roadmap items into pull requests.' },
 ];
+
+// Write-ups for the public repos, keyed by repo name. Every claim here is in the repo's code.
+// Repos without an entry still show, with their GitHub description.
+export type ProjectNote = {
+  title: string;
+  kind: string;
+  tagline: string;
+  highlights: string[];
+  stack: string[];
+  art: 'mug' | 'terminal' | 'browser' | 'collage';
+  featured?: boolean;
+};
+
+export const projectNotes: Record<string, ProjectNote> = {
+  'JaunteGarciaZa.github.io': {
+    title: 'This portfolio',
+    kind: 'Web · React + TypeScript',
+    tagline:
+      'The site you’re on: a sticker-book design system built from scratch, animated end to end, and deployed by CI on every push.',
+    highlights: [
+      'Every sticker, ribbon and the Joburg skyline is hand-built SVG: no image files, no icon packs',
+      'GSAP ScrollTrigger and SplitText choreography on Lenis smooth scroll, plus an idle loop for every sticker',
+      'Respects reduced motion with a plain static page, and idle loops only run while they’re on screen',
+      'GitHub data is synced at build time, then GitHub Actions builds and publishes to Pages',
+    ],
+    stack: ['React', 'TypeScript', 'Vite', 'GSAP', 'Lenis', 'SVG', 'GitHub Actions'],
+    art: 'collage',
+    featured: true,
+  },
+  'JAVA-Pomodoro-timer': {
+    title: 'Lo-fi Pomodoro Clock',
+    kind: 'Desktop app · JavaFX',
+    tagline: 'A focus timer where a hand-drawn coffee mug fills as you work and drains while you rest.',
+    highlights: [
+      'The timer is a state machine (work, short break ×4, long break) ticking on a JavaFX Timeline',
+      'The mug is painted on a Canvas every frame: coffee level follows progress, with waves, steam and a flash on each change',
+      'Chimes are synthesised from sine-wave partials in code (no audio files), played on a daemon thread so the UI never stalls',
+      'Ships as a fat JAR (Maven Shade) and a Windows .exe (Launch4j); Space, R and M drive it from the keyboard',
+    ],
+    stack: ['Java 17', 'JavaFX 21', 'Maven', 'Launch4j', 'javax.sound'],
+    art: 'mug',
+  },
+  JavaStudentGradeCalculator: {
+    title: 'Academic Management CLI',
+    kind: 'Console app · Java',
+    tagline: 'Registers students, validates their marks and prints a class report, without crashing on bad input.',
+    highlights: [
+      'A small domain model (Student, Lecturer, SchoolClass) with the grading rules behind a GradeCalculator interface',
+      'Averages computed with streams and banded into Distinction, Pass or Fail',
+      'Text where a number belongs, or a mark outside 0–100, is caught and explained; the menu keeps running',
+      'Modern Java: switch expressions and an instance main method',
+    ],
+    stack: ['Java', 'OOP', 'Streams', 'Interfaces'],
+    art: 'terminal',
+  },
+  MyFirstWebsite: {
+    title: 'First landing page',
+    kind: 'Web · HTML + Tailwind',
+    tagline: 'Where the web side started: a landing page with its service cards rendered from data.',
+    highlights: [
+      'Semantic HTML5 sections: header, hero, services, blog and a contact form with native validation',
+      'Service cards generated from a JavaScript array with map(), including disabled out-of-stock states',
+      'Styled with Tailwind utilities and hover transitions; a login toggle wired with DOM events',
+    ],
+    stack: ['HTML5', 'Tailwind CSS', 'JavaScript'],
+    art: 'browser',
+  },
+};
+
+// Featured first, then the strongest work.
+export const projectOrder = ['JaunteGarciaZa.github.io', 'JAVA-Pomodoro-timer', 'JavaStudentGradeCalculator', 'MyFirstWebsite'];

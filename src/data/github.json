@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-10-16T21:21:21.975Z",
+  "syncedAt": "2026-10-17T11:17:26.349Z",
   "profile": {
     "login": "JaunteGarciaZa",
     "name": "Jaunte Kelvin Garcia",
@@ -8,9 +8,19 @@
     "url": "https://github.com/JaunteGarciaZa",
     "avatar": "https://avatars.githubusercontent.com/u/208694036?v=4",
     "joined": "2025-04-22T17:31:07Z",
-    "publicRepos": 3
+    "publicRepos": 4
   },
   "repos": [
+    {
+      "name": "JaunteGarciaZa.github.io",
+      "description": "Portfolio: Jaunte Kelvin Garcia, full-stack developer building WIOS",
+      "language": "TypeScript",
+      "url": "https://github.com/JaunteGarciaZa/JaunteGarciaZa.github.io",
+      "homepage": "https://jauntegarciaza.github.io/",
+      "stars": 0,
+      "pushedAt": "2026-10-17T11:12:00Z",
+      "topics": []
+    },
     {
       "name": "JAVA-Pomodoro-timer",
       "description": "a Java pomodoro timer using JavaFX",
