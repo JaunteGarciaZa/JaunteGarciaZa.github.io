@@ -6,7 +6,7 @@ export const person = {
   role: 'Full-stack developer',
   location: 'Johannesburg, South Africa',
   intro:
-    'I build WIOS: a multi-tenant learning platform, the analytics service behind it, and an AI dev crew that helps ship both. Java developer in training at VZAP, working full-stack in TypeScript.',
+    'I build WIOS: a multi-tenant learning platform, the analytics service behind it, and an AI dev crew that helps ship both. By day I’m a junior tester at Healthbridge, placed through VZAP; I build full-stack in TypeScript.',
   github: 'https://github.com/JaunteGarciaZa',
   // Add a public contact address or LinkedIn here when you want one on the site.
   email: null as string | null,
@@ -92,6 +92,7 @@ export const journey: { when: string; title: string; text: string }[] = [
   { when: 'Apr 2026', title: 'First website, then WIOS Learn', text: 'Shipped a first HTML site, then started the LMS that became the core of WIOS.' },
   { when: 'Jul 2026', title: 'WIOS Analytics', text: 'Split learning analytics into its own xAPI service so any LMS can use it.' },
   { when: 'Oct 2026', title: 'WIOS Console and the dev crew', text: 'Built the operator console and an AI crew that turns roadmap items into pull requests.' },
+  { when: 'Now', title: 'Junior tester at Healthbridge', text: 'Testing healthcare software at Healthbridge, placed through VZAP.' },
 ];
 
 // Write-ups for the public repos, keyed by repo name. Every claim here is in the repo's code.

@@ -43,6 +43,7 @@ const MARQUEE: { text: string; lang?: string }[] = [
   { text: 'Open to full-stack & Java roles' },
   { text: 'Howzit!', lang: 'en-ZA' },
   { text: 'Building WIOS in Jozi' },
+  { text: 'Junior tester at Healthbridge' },
   { text: 'Goeie dag!', lang: 'af' },
   { text: 'AI dev crew on Claude Code' },
   { text: 'Sanibonani!', lang: 'zu' },
